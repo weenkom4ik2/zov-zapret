@@ -1,5 +1,5 @@
 @echo off
-set "LOCAL_VERSION=ZOV: 1.9.4"
+set "LOCAL_VERSION=1.9.5"
 
 :: External commands
 if "%~1"=="status_zapret" (
@@ -348,9 +348,9 @@ chcp 437 > nul
 cls
 
 :: Set current version and URLs
-set "GITHUB_VERSION_URL=https://raw.githubusercontent.com/Flowseal/zapret-discord-youtube/main/.service/version.txt"
-set "GITHUB_RELEASE_URL=https://github.com/Flowseal/zapret-discord-youtube/releases/tag/"
-set "GITHUB_DOWNLOAD_URL=https://github.com/Flowseal/zapret-discord-youtube/releases/latest/download/zapret-discord-youtube-"
+set "GITHUB_VERSION_URL=https://raw.githubusercontent.com/weenkom4ik2/zov-zapret/main/.service/version.txt"
+set "GITHUB_RELEASE_URL=https://github.com/weenkom4ik2/zov-zapret/releases/tag/"
+set "GITHUB_DOWNLOAD_URL=https://github.com/weenkom4ik2/zov-zapret/archive/refs/tags/"
 
 :: Get the latest version from GitHub
 for /f "delims=" %%A in ('powershell -command "(Invoke-WebRequest -Uri \"%GITHUB_VERSION_URL%\" -Headers @{\"Cache-Control\"=\"no-cache\"} -UseBasicParsing -TimeoutSec 5).Content.Trim()" 2^>nul') do set "GITHUB_VERSION=%%A"
@@ -376,11 +376,13 @@ echo New version available: %GITHUB_VERSION%
 echo Release page: %GITHUB_RELEASE_URL%%GITHUB_VERSION%
 
 set "CHOICE="
-set /p "ZOV ZAPRET started. Thanks for downloading. "
+set /p "CHOICE=Do you want to automatically download the new version of ZOV ZAPRET? (Y/N) (default: Y) "
 if "%CHOICE%"=="" set "CHOICE=Y"
 if /i "%CHOICE%"=="y" set "CHOICE=Y"
 
 if /i "%CHOICE%"=="Y" (
+    echo Opening the download page...
+    start "" "%GITHUB_DOWNLOAD_URL%%GITHUB_VERSION%.zip"
 )
 
 
