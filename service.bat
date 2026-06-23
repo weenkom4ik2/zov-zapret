@@ -1,5 +1,5 @@
 @echo off
-set "LOCAL_VERSION=1.9.5"
+set "LOCAL_VERSION=1.9.5a"
 
 :: External commands
 if "%~1"=="status_zapret" (
@@ -71,8 +71,9 @@ echo ===========================
 echo 10. Run Tests
 echo 11. Credits
 echo 12. Open FLC (Fast Language Changer) [TESTING]
+echo 13. Admin Mode
 echo 0. Exit
-set /p menu_choice=Enter choice (0-12): 
+set /p menu_choice=Enter choice (0-13): 
 
 if "%menu_choice%"=="1" goto service_install
 if "%menu_choice%"=="2" goto service_remove
@@ -86,6 +87,7 @@ if "%menu_choice%"=="9" goto ipset_update
 if "%menu_choice%"=="10" goto run_tests
 if "%menu_choice%"=="11" call :credits_zov
 if "%menu_choice%"=="12" call :flc
+if "%menu_choice%"=="13" call :vdv
 if "%menu_choice%"=="0" exit /b
 goto menu
 
@@ -93,6 +95,13 @@ goto menu
 :: TCP ENABLE ==========================
 :tcp_enable
 netsh interface tcp show global | findstr /i "timestamps" | findstr /i "enabled" > nul || netsh interface tcp set global timestamps=enabled > nul 2>&1
+exit /b
+
+:: VDV/ADMIN FUNC +=+=+=+=+=+=+=+=+=+=+=
+:vdv
+echo VDV ADMIN PANEL
+start /b "" "%~dp0\source\VDV.mp3"
+echo lol prank👍
 exit /b
 
 :: CREDITS ==========================
