@@ -1,5 +1,5 @@
 @echo off
-set "LOCAL_VERSION=1.9.5a"
+set "LOCAL_VERSION=1.9.6"
 
 :: External commands
 if "%~1"=="status_zapret" (
@@ -71,7 +71,9 @@ echo ===========================
 echo 10. Run Tests
 echo 11. Credits
 echo 12. Open FLC (Fast Language Changer) [TESTING]
-echo 13. Admin Mode
+echo 13. Source Opener
+echo 14. Admin Mode
+echo WARNING. Some new functions can be bugged, you can open some of this here: 12. ZOV ZAPRET\utils\FLC\FLC.bat   13. ZOV ZAPRET\source_opener.bat
 echo 0. Exit
 set /p menu_choice=Enter choice (0-13): 
 
@@ -87,7 +89,8 @@ if "%menu_choice%"=="9" goto ipset_update
 if "%menu_choice%"=="10" goto run_tests
 if "%menu_choice%"=="11" call :credits_zov
 if "%menu_choice%"=="12" call :flc
-if "%menu_choice%"=="13" call :vdv
+if "%menu_choice%"=="13" call :lc
+if "%menu_choice%"=="14" call :vdv
 if "%menu_choice%"=="0" exit /b
 goto menu
 
@@ -96,12 +99,18 @@ goto menu
 :tcp_enable
 netsh interface tcp show global | findstr /i "timestamps" | findstr /i "enabled" > nul || netsh interface tcp set global timestamps=enabled > nul 2>&1
 exit /b
+:: LC ===========================
+:lc
+set "folderOur=%~dp0source_opener.bat"
+start /b "" "%folderOur%"
+pause
+exit /b
 
 :: VDV/ADMIN FUNC +=+=+=+=+=+=+=+=+=+=+=
 :vdv
 echo VDV ADMIN PANEL
 start /b "" "%~dp0\source\VDV.mp3"
-echo lol prank👍
+echo lol prank
 exit /b
 
 :: CREDITS ==========================
@@ -116,7 +125,7 @@ echo Download Original Zapret you can by link here: https://github.com/Flowseal/
 echo That Zapret is old and remaked version of original. We have lists for Roblox, Youtube, Discord, Cloudflare Systems and much more you can watch at folder with name lists.
 echo All Assets by Flowseal. Thats remake. Owner don't want to earn by this. This old version of zapret that you can still download. (https://github.com/Flowseal/zapret-discord-youtube/releases/tag/1.9.4)
 echo ==========================
-echo Thanks You for using our Zov Zapret❤
+echo Thanks You for using our Zov Zapret!
 pause
 exit /b
 
