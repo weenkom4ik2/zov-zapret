@@ -1,6 +1,7 @@
 # Zov Zapret
 ПРОЧИТАЙТЕ ПОЛНОСТЬЮ!
 # <img src="https://cdn-icons-png.flaticon.com/128/5968/5968756.png" height=28 /> <a href="https://github.com/weenkom4ik2/">weenkom4ik2</a><a href="https://github.com/weenkom4ik2/zov-zapret">/zov-zapret</a> <img src="https://cdn-icons-png.flaticon.com/128/1384/1384060.png" height=28 />
+## <img src="https://cdn-icons-png.flaticon.com/512/2522/2522998.png" height=24 /> [Задонатить (Donate)](https://www.donationalerts.com/r/weenkom4ik)
 ## Аудитория
 Zov Zapret расчитан на русских пользователей и иногда английских для FPS буста.
 ## Как использовать
