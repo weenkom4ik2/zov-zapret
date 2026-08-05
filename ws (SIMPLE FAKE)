@@ -3,7 +3,7 @@ chcp 65001 > nul
 :: 65001 - UTF-8
 color 4
 mode con: cols=80 lines=25
-title ZOV ZAPRET; WORKING ONE
+title ZOV ZAPRET; SIMPLE FAKE
 cd /d "%~dp0"
 call service.bat status_zapret
 call service.bat check_updates
