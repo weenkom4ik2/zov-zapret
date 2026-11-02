@@ -448,3 +448,16 @@ cfl.re
 www.robtopgames.org
 boomlings.com
 www.newgrounds.com
+discordapp.page.link
+discord-attachments-uploads-prd.storage.googleapis.com
+media.discordapp.net
+images-ext-1.discordapp.net
+cdn.discordapp.com
+discordapp.io
+discordapp.org
+discordstatus.com
+hammerandchisel.ssl.zendesk.com
+watchanimeattheoffice.com
+airhorn.solutions
+airhornbot.com
+bigbeans.solutions
