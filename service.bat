@@ -1,5 +1,5 @@
 @echo off
-set "LOCAL_VERSION=1.9.8"
+set "LOCAL_VERSION=1.9.8b"
 
 :: External commands
 if "%~1"=="status_zapret" (
@@ -74,9 +74,10 @@ echo 12. Open FLC (Fast Language Changer) [TESTING]
 echo 13. Source Opener
 echo 14. Roblox Thumbnail Fixer Tool
 echo 15. Admin Mode
-echo WARNING. Some new functions can be bugged, you can open some of this here: 12. ZOV ZAPRET\utils\FLC\FLC.bat   13. ZOV ZAPRET\source_opener.bat
+echo 16. Configs Editor
+echo WARNING. Some new functions can be bugged, you can open some of this here: 12. ZOV ZAPRET\utils\FLC\FLC.bat   13. ZOV ZAPRET\source_opener.bat  16. ZOV ZAPRET\utils\configsEditor.bat
 echo 0. Exit
-set /p menu_choice=Enter choice (0-15): 
+set /p menu_choice=Enter choice (0-16): 
 
 if "%menu_choice%"=="1" goto service_install
 if "%menu_choice%"=="2" goto service_remove
@@ -93,6 +94,7 @@ if "%menu_choice%"=="12" call :flc
 if "%menu_choice%"=="13" call :lc
 if "%menu_choice%"=="13" call :rthumb
 if "%menu_choice%"=="15" call :vdv
+if "%menu_choice%"=="16" call :cfedit
 if "%menu_choice%"=="0" exit /b
 goto menu
 
@@ -134,6 +136,13 @@ exit /b
 :: FLC ==========================
 :flc
 set "folderOur=%~dp0\utils\FLC\FLC.bat"
+start /b "" "%folderOur%"
+pause
+exit /b
+
+:: CONFIG EDITOR ==========================
+:cfedit
+set "folderOur=%~dp0\utils\configEditor.bat"
 start /b "" "%folderOur%"
 pause
 exit /b
