@@ -1,6 +1,5 @@
 @echo off
-setlocal EnableDelayedExpansion
-set "LOCAL_VERSION=1.9.8b"
+set "LOCAL_VERSION=1.9.8c"
 
 :: External commands
 if "%~1"=="status_zapret" (
@@ -26,44 +25,26 @@ if "%~1"=="load_game_filter" (
     exit /b
 )
 
-:: --- Admin / non-admin entry point ---
-if /i "%~1"=="admin" (
+if "%1"=="admin" (
     call :check_command chcp
     call :check_command find
     call :check_command findstr
     call :check_command netsh
 
-    call :is_admin
-    if !errorlevel! neq 0 (
-        call :PrintRed "[ERROR] Failed to get admin rights. Run this file as administrator manually."
-        pause
-        exit /b 1
-    )
-
-    call :PrintGreen "Started with admin rights"
-    goto menu
+    echo Started with admin rights
 ) else (
     call :check_extracted
-    if !errorlevel! neq 0 exit /b 1
     call :check_command powershell
-    if !errorlevel! neq 0 exit /b 1
-
-    call :is_admin
-    if !errorlevel!==0 (
-        :: Already admin, just go to menu
-        goto menu
-    )
-
     color 4
-    call :PrintYellow "Requesting admin rights..."
+    echo Requesting admin rights...
     powershell -Command "Start-Process 'cmd.exe' -ArgumentList '/c \"\"%~f0\" admin\"' -Verb RunAs"
-    exit /b
+    exit
 )
 
 
 :: MENU ================================
+setlocal EnableDelayedExpansion
 :menu
-chcp 65001 >nul
 cls
 call :ipset_switch_status
 call :game_switch_status
@@ -134,7 +115,7 @@ goto menu
 netsh interface tcp show global | findstr /i "timestamps" | findstr /i "enabled" > nul || netsh interface tcp set global timestamps=enabled > nul 2>&1
 exit /b
 
-:: LC (Source Opener) ==================
+:: LC ===========================
 :lc
 set "folderOur=%~dp0source_opener.bat"
 if not exist "%folderOur%" (
@@ -142,18 +123,16 @@ if not exist "%folderOur%" (
     pause
     exit /b
 )
-start /b "" "%folderOur%"
-pause
+start "" "%folderOur%"
 exit /b
 
-:: PRANK (VDV) ========================
+:: VDV ========================
 :vdv
-chcp 65001 >nul
+chcp 437 >nul
 cls
 color 1
-
 if exist "%~dp0source\VDV.mp3" (
-    start /b "" "%~dp0source\VDV.mp3"
+    start "" "%~dp0source\VDV.mp3"
 ) else (
     echo [ERROR] VDV.mp3 not found dude
 )
@@ -162,7 +141,7 @@ set "prank_choice=null"
 echo ============================================
 echo        VDV PATRIOT PANEL  [ZOV ZOV ZOV OMG PANEL]
 echo ============================================
-echo  1. Play VDV Song More
+echo  1. Play VDV Song
 echo  2. Show VDV Rank
 echo  3. ZOV ZOV ZOV Generator
 echo  4. Call VDV Commander
@@ -178,6 +157,9 @@ echo 13. VDV Diet Plan
 echo 14. Parachute Check
 echo 15. Motherland Loyalty Test
 echo  0. Back
+echo ============================================
+echo this just a meme panel, not real panel for use
+echo Song That Playing: VDV S Neba Privet - Aleksandr Buinov
 echo ============================================
 set /p prank_choice=Choose (0-15): 
 
@@ -196,32 +178,42 @@ if "%prank_choice%"=="12" goto prank_send
 if "%prank_choice%"=="13" goto prank_diet
 if "%prank_choice%"=="14" goto prank_parachute
 if "%prank_choice%"=="15" goto prank_loyalty
-if "%prank_choice%"=="0" exit /b
+if "%prank_choice%"=="0" (
+    chcp 65001 >nul
+    color 4
+    goto menu
+)
 goto vdv
 
 
 :: --- Prank handlers ---
 
 :prank_anthem
-echo Playing VDV Anthem...
+chcp 437 >nul
+cls
+echo Playing VDV Song...
 if exist "%~dp0source\VDV.mp3" (
-    start /b "" "%~dp0source\VDV.mp3"
+    start "" "%~dp0source\VDV.mp3"
 ) else (
     echo [ERROR] VDV.mp3 not found dude
 )
 echo ZOV ZOV ZOV Z Z Z Z Z VDV SLAVA ROSSIE YA PATRIOT
 pause
-exit /b
+goto vdv
 
 :prank_rank
+chcp 437 >nul
+cls
 echo Calculating VDV rank...
 timeout /t 1 >nul
 echo Your rank: PRIVATE OF THE AIRBORNE
 echo Next rank: SERGEANT (need 3 more jumps)
 pause
-exit /b
+goto vdv
 
 :prank_zov
+chcp 437 >nul
+cls
 echo Generating ZOV sequence...
 for /l %%i in (1,1,5) do (
     echo ZOV ZOV ZOV ZOV ZOV
@@ -229,17 +221,21 @@ for /l %%i in (1,1,5) do (
 )
 echo ZOV GENERATED. MOTHERLAND APPROVES.
 pause
-exit /b
+goto vdv
 
 :prank_commander
+chcp 437 >nul
+cls
 echo Calling VDV Commander...
 timeout /t 2 >nul
 echo [PHONE] Commander: "ZOV ZOV, comrade. Stay strong."
 echo Call disconnected after 2 seconds.
 pause
-exit /b
+goto vdv
 
 :prank_jump
+chcp 437 >nul
+cls
 echo Preparing airborne jump...
 for /l %%i in (3,-1,1) do (
     echo Jumping in %%i...
@@ -249,27 +245,33 @@ echo JUMP! You are now falling.
 timeout /t 2 >nul
 echo [SIMULATION ENDED] You landed in your chair.
 pause
-exit /b
+goto vdv
 
 :prank_map
+chcp 437 >nul
+cls
 echo Loading Russia map...
 timeout /t 1 >nul
 echo [MAP] Russia: 17,098,242 km2 loaded.
 echo [MAP] VDV bases: 42 found.
 echo [MAP] ZOV zones: 7 found.
 pause
-exit /b
+goto vdv
 
 :prank_patriot
+chcp 437 >nul
+cls
 echo Activating PATRIOT MODE...
 timeout /t 1 >nul
 echo [PATRIOT MODE] ON
 echo [FPS] +0 (but your heart is +100)
 echo [MOTHERLAND] Protected
 pause
-exit /b
+goto vdv
 
 :prank_stats
+chcp 437 >nul
+cls
 echo ===== MOTHERLAND STATS =====
 echo Citizens: 146,000,000
 echo VDV soldiers: 45,000
@@ -277,18 +279,22 @@ echo ZOV level: MAXIMUM
 echo Patriotism: 100%%
 echo ============================
 pause
-exit /b
+goto vdv
 
 :prank_border
+chcp 437 >nul
+cls
 echo Defending the border...
 timeout /t 2 >nul
 echo [BORDER] Secure.
 echo [BORDER] No threats detected.
 echo [BORDER] ZOV approved.
 pause
-exit /b
+goto vdv
 
 :prank_spetsnaz
+chcp 437 >nul
+cls
 echo Starting Spetsnaz training...
 timeout /t 1 >nul
 echo Task 1: Push-ups ... DONE
@@ -298,9 +304,11 @@ timeout /t 1 >nul
 echo Task 3: ZOV shout ... DONE
 echo TRAINING COMPLETE. YOU ARE SPETSNAZ.
 pause
-exit /b
+goto vdv
 
 :prank_document
+chcp 437 >nul
+cls
 echo Decrypting secret VDV document...
 timeout /t 2 >nul
 echo ===== TOP SECRET =====
@@ -309,17 +317,21 @@ echo Status: CLASSIFIED
 echo Clearance: DENIED
 echo ======================
 pause
-exit /b
+goto vdv
 
 :prank_send
+chcp 437 >nul
+cls
 echo Sending ZOV to friend...
 timeout /t 1 >nul
 echo [SENT] Message: ZOV ZOV ZOV SLAVA ROSSIE
 echo [SENT] Friend is now a patriot.
 pause
-exit /b
+goto vdv
 
 :prank_diet
+chcp 437 >nul
+cls
 echo ===== VDV DIET PLAN =====
 echo Breakfast: Buckwheat + ZOV
 echo Lunch: Buckwheat + ZOV
@@ -327,9 +339,11 @@ echo Dinner: ZOV + Buckwheat
 echo Water: Optional
 echo ==========================
 pause
-exit /b
+goto vdv
 
 :prank_parachute
+chcp 437 >nul
+cls
 echo Checking parachute...
 timeout /t 1 >nul
 echo [PARACHUTE] Found
@@ -337,9 +351,11 @@ echo [PARACHUTE] Holes: 0
 echo [PARACHUTE] ZOV approved
 echo Safe to jump, comrade.
 pause
-exit /b
+goto vdv
 
 :prank_loyalty
+chcp 437 >nul
+cls
 echo Running Motherland Loyalty Test...
 timeout /t 1 >nul
 set /a score=%random% %% 101
@@ -350,10 +366,13 @@ if %score% GEQ 50 (
     echo [FAILED] Report to VDV Commander immediately.
 )
 pause
-exit /b
+goto vdv
+
 
 :: CREDITS ==========================
 :credits_zov
+chcp 65001 >nul
+cls
 echo.
 echo =========  ZOV ZAPRET  =========
 echo =========   CREDITS    =========
@@ -361,17 +380,12 @@ echo.
 echo Original Zapret belongs to Flowseal (https://github.com/Flowseal)
 echo Zov Zapret belongs to Weenkom4ik (https://github.com/weenkom4ik2)
 echo Download Original Zapret you can by link here: https://github.com/Flowseal/zapret-discord-youtube/releases
-echo This is an old remaked version of the original Zapret.
-echo We have lists for Roblox, Youtube, Discord, Cloudflare Systems and much more.
-echo You can watch them in the lists folder.
-echo All Assets by Flowseal. This is a remake.
-echo Owner doesn't want to earn by this.
-echo This is an old version of zapret that you can still download:
-echo https://github.com/Flowseal/zapret-discord-youtube/releases/tag/1.9.4
+echo That Zapret is old and remaked version of original. We have lists for Roblox, Youtube, Discord, Cloudflare Systems and much more you can watch at folder with name lists.
+echo All Assets by Flowseal. Thats remake. Owner don't want to earn by this. This old version of zapret that you can still download. (https://github.com/Flowseal/zapret-discord-youtube/releases/tag/1.9.4)
 echo ==========================
 echo Thanks You for using our Zov Zapret!
 pause
-exit /b
+goto menu
 
 :: FLC ==========================
 :flc
@@ -381,8 +395,7 @@ if not exist "%folderOur%" (
     pause
     exit /b
 )
-start /b "" "%folderOur%"
-pause
+start "" "%folderOur%"
 exit /b
 
 :: CONFIG EDITOR ==========================
@@ -393,8 +406,7 @@ if not exist "%folderOur%" (
     pause
     exit /b
 )
-start /b "" "%folderOur%"
-pause
+start "" "%folderOur%"
 exit /b
 
 :: ROBLOX THUMBNAILS ==========================
@@ -405,7 +417,6 @@ if not exist "%~dp0RobloxThumbnailFixer.bat" (
     exit /b
 )
 start "" "%~dp0RobloxThumbnailFixer.bat"
-pause
 exit /b
 
 :: OPEN LISTS FOLDER ===================
@@ -523,15 +534,6 @@ if !errorlevel!==0 (
 net stop "WinDivert14" >nul 2>&1
 sc delete "WinDivert14" >nul 2>&1
 
-:: Restore ipset backup if it was left in "none" mode
-set "listFile=%~dp0lists\ipset-all.txt"
-set "backupFile=%listFile%.backup"
-if exist "%backupFile%" (
-    del /f /q "%listFile%" >nul 2>&1
-    ren "%backupFile%" "ipset-all.txt" >nul 2>&1
-    call :PrintGreen "ipset list restored from backup"
-)
-
 pause
 goto menu
 
@@ -545,13 +547,6 @@ chcp 65001 > nul
 cd /d "%~dp0"
 set "BIN_PATH=%~dp0bin\"
 set "LISTS_PATH=%~dp0lists\"
-
-:: Integrity check
-call :check_files
-if !errorlevel! neq 0 (
-    pause
-    goto menu
-)
 
 :: Searching for .bat files in current folder, except files that start with "service"
 echo Pick one of the options:
@@ -568,7 +563,7 @@ for %%f in (*.bat) do (
 :: Choosing file
 set "choice="
 set /p "choice=Input file index (number): "
-if "!choice!"=="" goto menu
+if "!choice!"=="" goto :eof
 
 set "selectedFile=!file%choice%!"
 if not defined selectedFile (
@@ -580,7 +575,7 @@ if not defined selectedFile (
 :: Args that should be followed by value
 set "args_with_value=sni host altorder"
 
-:: Parsing args (mergeargs: 2=start param^|3=arg with value^|1=params args^|0=default)
+:: Parsing args (mergeargs: 2=start param|3=arg with value|1=params args|0=default)
 set "args="
 set "capture=0"
 set "mergeargs=0"
@@ -590,14 +585,14 @@ for /f "tokens=*" %%a in ('type "!selectedFile!"') do (
     set "line=%%a"
     call set "line=%%line:^!=EXCL_MARK%%"
 
-    echo !line! | findstr /i "winws.exe" >nul
+    echo !line! | findstr /i "%BIN%winws.exe" >nul
     if not errorlevel 1 (
         set "capture=1"
     )
 
     if !capture!==1 (
         if not defined args (
-            set "line=!line:*winws.exe"=!"
+            set "line=!line:*%BIN%winws.exe"=!"
         )
 
         set "temp_args="
@@ -657,13 +652,6 @@ for /f "tokens=*" %%a in ('type "!selectedFile!"') do (
     )
 )
 
-:: Sanity check on parsed args
-if "!args!"=="" (
-    call :PrintRed "Failed to parse arguments from !selectedFile!. The .bat file may use unexpected syntax."
-    pause
-    goto menu
-)
-
 :: Creating service with parsed args
 call :tcp_enable
 
@@ -675,18 +663,12 @@ set SRVCNAME=zapret
 net stop %SRVCNAME% >nul 2>&1
 sc delete %SRVCNAME% >nul 2>&1
 sc create %SRVCNAME% binPath= "\"%BIN_PATH%winws.exe\" !ARGS!" DisplayName= "zapret" start= auto
-if !errorlevel! neq 0 (
-    call :PrintRed "Failed to create service. Check the arguments above."
-    pause
-    goto menu
-)
 sc description %SRVCNAME% "Zapret DPI bypass software"
 sc start %SRVCNAME%
 for %%F in ("!file%choice%!") do (
     set "filename=%%~nF"
 )
 reg add "HKLM\System\CurrentControlSet\Services\zapret" /v zapret-discord-youtube /t REG_SZ /d "!filename!" /f
-call :PrintGreen "Service installed with strategy: !filename!"
 
 pause
 goto menu
@@ -697,27 +679,23 @@ goto menu
 chcp 437 > nul
 cls
 
-:: Set current version and URLs
 set "GITHUB_VERSION_URL=https://raw.githubusercontent.com/weenkom4ik2/zov-zapret/main/.service/version.txt"
 set "GITHUB_RELEASE_URL=https://github.com/weenkom4ik2/zov-zapret/releases/tag/"
 set "GITHUB_DOWNLOAD_URL=https://github.com/weenkom4ik2/zov-zapret/archive/refs/tags/"
 
-:: Get the latest version from GitHub
 for /f "delims=" %%A in ('powershell -command "(Invoke-WebRequest -Uri \"%GITHUB_VERSION_URL%\" -Headers @{\"Cache-Control\"=\"no-cache\"} -UseBasicParsing -TimeoutSec 5).Content.Trim()" 2^>nul') do set "GITHUB_VERSION=%%A"
 
-:: Error handling
 if not defined GITHUB_VERSION (
     echo Warning: failed to fetch the latest version. This warning does not affect the operation of zapret. Check your internet connection,
     timeout /T 9
-    if "%1"=="soft" exit /b
+    if "%1"=="soft" exit 
     goto menu
 )
 
-:: Version comparison
 if "%LOCAL_VERSION%"=="%GITHUB_VERSION%" (
     echo Latest version installed: %LOCAL_VERSION%
     
-    if "%1"=="soft" exit /b
+    if "%1"=="soft" exit 
     pause
     goto menu
 ) 
@@ -736,10 +714,9 @@ if /i "%CHOICE%"=="Y" (
 )
 
 
-if "%1"=="soft" exit /b
+if "%1"=="soft" exit 
 pause
 goto menu
-
 
 
 :: DIAGNOSTICS =========================
@@ -747,7 +724,6 @@ goto menu
 chcp 437 > nul
 cls
 
-:: Base Filtering Engine
 sc query BFE | findstr /I "RUNNING" > nul
 if !errorlevel!==0 (
     call :PrintGreen "Base Filtering Engine check passed"
@@ -756,7 +732,6 @@ if !errorlevel!==0 (
 )
 echo:
 
-:: Proxy check
 set "proxyEnabled=0"
 set "proxyServer="
 
@@ -776,7 +751,6 @@ if !proxyEnabled!==1 (
 )
 echo:
 
-:: Check netsh
 where netsh >nul 2>nul
 if !errorlevel! neq 0  (
     call :PrintRed "[X] netsh command not found, check your PATH variable"
@@ -786,7 +760,6 @@ if !errorlevel! neq 0  (
 	goto menu
 )
 
-:: TCP timestamps check
 netsh interface tcp show global | findstr /i "timestamps" | findstr /i "enabled" > nul
 if !errorlevel!==0 (
     call :PrintGreen "TCP timestamps check passed"
@@ -801,7 +774,6 @@ if !errorlevel!==0 (
 )
 echo:
 
-:: AdguardSvc.exe
 tasklist /FI "IMAGENAME eq AdguardSvc.exe" | find /I "AdguardSvc.exe" > nul
 if !errorlevel!==0 (
     call :PrintRed "[X] Adguard process found. Adguard may cause problems with Discord"
@@ -811,7 +783,6 @@ if !errorlevel!==0 (
 )
 echo:
 
-:: Killer
 sc query | findstr /I "Killer" > nul
 if !errorlevel!==0 (
     call :PrintRed "[X] Killer services found. Killer conflicts with zapret"
@@ -821,7 +792,6 @@ if !errorlevel!==0 (
 )
 echo:
 
-:: Intel Connectivity Network Service
 sc query | findstr /I "Intel" | findstr /I "Connectivity" | findstr /I "Network" > nul
 if !errorlevel!==0 (
     call :PrintRed "[X] Intel Connectivity Network Service found. It conflicts with zapret"
@@ -831,7 +801,6 @@ if !errorlevel!==0 (
 )
 echo:
 
-:: Check Point
 set "checkpointFound=0"
 sc query | findstr /I "TracSrvWrapper" > nul
 if !errorlevel!==0 (
@@ -851,7 +820,6 @@ if !checkpointFound!==1 (
 )
 echo:
 
-:: SmartByte
 sc query | findstr /I "SmartByte" > nul
 if !errorlevel!==0 (
     call :PrintRed "[X] SmartByte services found. SmartByte conflicts with zapret"
@@ -861,14 +829,12 @@ if !errorlevel!==0 (
 )
 echo:
 
-:: WinDivert64.sys file
 set "BIN_PATH=%~dp0bin\"
 if not exist "%BIN_PATH%\*.sys" (
     call :PrintRed "WinDivert64.sys file NOT found."
 )
 echo:
 
-:: VPN
 set "VPN_SERVICES="
 sc query | findstr /I "VPN" > nul
 if !errorlevel!==0 (
@@ -886,7 +852,6 @@ if !errorlevel!==0 (
 )
 echo:
 
-:: DNS
 set "dohfound=0"
 for /f "delims=" %%a in ('powershell -Command "Get-ChildItem -Recurse -Path 'HKLM:System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\' | Get-ItemProperty | Where-Object { $_.DohFlags -gt 0 } | Measure-Object | Select-Object -ExpandProperty Count"') do (
     if %%a gtr 0 (
@@ -901,7 +866,6 @@ if !dohfound!==0 (
 )
 echo:
 
-:: WinDivert conflict
 tasklist /FI "IMAGENAME eq winws.exe" | find /I "winws.exe" > nul
 set "winws_running=!errorlevel!"
 
@@ -956,7 +920,6 @@ if !winws_running! neq 0 if !windivert_running!==0 (
     echo:
 )
 
-:: Conflicting bypasses
 set "conflicting_services=GoodbyeDPI discordfix_zapret winws1 winws2"
 set "found_any_conflict=0"
 set "found_conflicts="
@@ -1002,7 +965,6 @@ if !found_any_conflict!==1 (
     echo:
 )
 
-:: Discord cache clearing
 set "CHOICE="
 set /p "CHOICE=Do you want to clear the Discord cache? (Y/N) (default: Y)  "
 if "!CHOICE!"=="" set "CHOICE=Y"
@@ -1072,8 +1034,6 @@ if not exist "%gameFlagFile%" (
     call :PrintYellow "Restart the zapret to apply the changes"
 )
 
-call :offer_restart
-
 pause
 goto menu
 
@@ -1132,9 +1092,6 @@ exit /b
 chcp 437 > nul
 cls
 
-:: Recalculate status in case the file was changed manually
-call :ipset_switch_status
-
 set "listFile=%~dp0lists\ipset-all.txt"
 set "backupFile=%listFile%.backup"
 
@@ -1173,8 +1130,6 @@ if "%IPsetStatus%"=="loaded" (
     
 )
 
-call :offer_restart
-
 pause
 goto menu
 
@@ -1212,9 +1167,8 @@ goto menu
 chcp 65001 >nul
 cls
 
-:: Require PowerShell 2.0+
 powershell -NoProfile -Command "if ($PSVersionTable -and $PSVersionTable.PSVersion -and $PSVersionTable.PSVersion.Major -ge 2) { exit 0 } else { exit 1 }" >nul 2>&1
-if !errorlevel! neq 0 (
+if %errorLevel% neq 0 (
     echo PowerShell 2.0 or newer is required.
     echo Please upgrade PowerShell and rerun this script.
     echo.
@@ -1230,28 +1184,6 @@ goto menu
 
 
 :: Utility functions
-
-:is_admin
-:: Returns errorlevel 0 if admin, 1 if not
-fltmc >nul 2>&1
-if !errorlevel!==0 exit /b 0
-:: Fallback for systems where fltmc is missing
-net session >nul 2>&1
-if !errorlevel!==0 exit /b 0
-exit /b 1
-
-:offer_restart
-sc query "zapret" >nul 2>&1
-if !errorlevel! neq 0 (
-    exit /b
-)
-choice /c YN /m "Restart zapret service now to apply changes?"
-if !errorlevel!==1 (
-    net stop zapret >nul 2>&1
-    net start zapret >nul 2>&1
-    call :PrintGreen "zapret service restarted"
-)
-exit /b
 
 :PrintGreen
 powershell -Command "Write-Host \"%~1\" -ForegroundColor Green"
@@ -1283,26 +1215,6 @@ if not exist "%~dp0bin\" set "extracted=0"
 if "%extracted%"=="0" (
     echo Zov Zapret must be extracted from archive first or bin folder not found for some reason
     pause
-    exit /b 1
-)
-exit /b 0
-
-:check_files
-set "missing=0"
-if not exist "%~dp0bin\winws.exe" (
-    call :PrintRed "[ERROR] bin\winws.exe not found"
-    set "missing=1"
-)
-if not exist "%~dp0bin\WinDivert64.sys" (
-    call :PrintRed "[ERROR] bin\WinDivert64.sys not found"
-    set "missing=1"
-)
-if not exist "%~dp0lists\ipset-all.txt" (
-    call :PrintRed "[ERROR] lists\ipset-all.txt not found"
-    set "missing=1"
-)
-if !missing!==1 (
-    call :PrintRed "Archive is not fully extracted. Re-download and extract again."
-    exit /b 1
+    exit
 )
 exit /b 0
